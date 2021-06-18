@@ -9,14 +9,17 @@ import axios from 'axios'
 function App() {
   const [items, setItems] = useState([]);
   const [query, setQuery] = useState('');
+  const [isLoading, setIsLoading] = useState();
+
   const getItem = async()=>{
+    setIsLoading(true)
     const result = await axios(`https://www.breakingbadapi.com/api/characters?name=${query}`);
     
     // const actualData = await res.json();
 
     const actualData=result.data;
     setItems(actualData);
-
+    setIsLoading(false)
   }
   useEffect(()=>{
     getItem();
@@ -25,7 +28,7 @@ function App() {
     <div>
       <img className="center" src="/images/logo.png" alt="Logo" />
       <Search getQuery={(q)=>setQuery(q)} />
-      <CharacterLists items={items} />
+      <CharacterLists items={items} isLoading={isLoading}/>
     </div>
   );
 }
